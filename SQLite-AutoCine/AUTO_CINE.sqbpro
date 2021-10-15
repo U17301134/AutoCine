@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/MiluWS74/Documents/UTP/PROGRAMACION_ORIENTADA_A_OBJETOS_1601/Proyecto_AutoCine_POO/SQLite-AutoCine/AUTO_CINE.sqlite" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="3689"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">CREATE TABLE CIUDAD 
+(idCiudad char(4) NOT NULL,
+nomCiudad varchar(30) NOT NULL,
+CONSTRAINT pk_CIUDAD PRIMARY KEY(idCiudad)
+);
+CREATE TABLE DEPARTAMENTO
+(idDepar char(6) NOT NULL,
+nomDepar varchar(30) NOT NULL,
+CONSTRAINT pk_DEPARTAMENTO PRIMARY KEY(idDepar)
+);
+CREATE TABLE GENERO
+(idGen char(4) NOT NULL,
+nomGen varchar(30) NOT NULL,
+CONSTRAINT pk_GENERO PRIMARY KEY(idGen)
+);
+CREATE TABLE CATEGORIA
+(idCateg char(4) NOT NULL,
+nomCateg varchar(50) NOT NULL,
+CONSTRAINT pk_CATEGORIA PRIMARY KEY(idCateg)
+);
+CREATE TABLE SERVICIOS
+(idServi char(5) NOT NULL,
+precioServi varchar(30) NOT NULL,
+CONSTRAINT pk_SERVICIOS PRIMARY KEY(idServi)
+);
+CREATE TABLE SALA
+(idSala char(3) NOT NULL,
+area char(1) NOT NULL,
+status char(1) NOT NULL,
+CONSTRAINT pk_SALA PRIMARY KEY(idSala)
+);
+CREATE TABLE ADMINISTRADOR
+(idAdmin char(4) NOT NULL,
+nomAdmin varchar(30) NOT NULL,
+apelPaAdmin varchar(30) NOT NULL,
+apelMaAdmin varchar(30) NULL,
+CONSTRAINT pk_ADMINISTRADOR PRIMARY KEY(idAdmin)
+);
+CREATE TABLE PELICULAS
+(idPeli char(6) NOT NULL,
+nomPeli varchar(30) NOT NULL,
+Descripcion TEXT NOT NULL,
+portPeli BLOB NOT NULL,
+CONSTRAINT pk_PELICULAS PRIMARY KEY(idPeli)
+);
+CREATE TABLE UBICACION
+(nroUbic char(2) NOT NULL,
+status char(1) NOT NULL,
+idSala char(3) NOT NULL,
+CONSTRAINT fk_SALA FOREIGN KEY(idSala) REFERENCES SALA(idSala),
+CONSTRAINT pk_UBICACION PRIMARY KEY(nroUbic)
+);
+CREATE TABLE PROVINCIA
+(idProv char(6) NOT NULL,
+nomProv varchar(30) NOT NULL,
+idDepar char(6) NOT NULL,
+CONSTRAINT fk_DEPARTAMENTO FOREIGN KEY(idDepar) REFERENCES DEPARTAMENTO(idDepar),
+CONSTRAINT pk_PROVINCIA PRIMARY KEY(idProv)
+);
+CREATE TABLE DISTRITO
+(idDistrito char(6) NOT NULL,
+nomDistrito varchar(30) NOT NULL,
+idProv char(6) NOT NULL,
+CONSTRAINT fk_PROVINCIA FOREIGN KEY(idProv) REFERENCES PROVINCIA(idProv),
+CONSTRAINT pk_DISTRITO PRIMARY KEY(idDistrito)
+);
+CREATE TABLE USUARIO
+(idUser char(8) NOT NULL,
+nomClien varchar(30) NOT NULL,
+apelPaCliente varchar(30) NOT NULL,
+apelMaCliente varchar(30) NULL,
+sexoClien char(10) NOT NULL,
+emailClien varchar(50) UNIQUE NOT NULL,
+passwordUser varchar(50) NOT NULL,
+fechaRegistro date NOT NULL,
+idDistrito char(6) NOT NULL,
+direccionClien varchar(50) NOT NULL,
+idAdmin char(4) NOT NULL,
+CONSTRAINT fk_ADMINISTRADOR FOREIGN KEY(idAdmin) REFERENCES ADMINISTRADOR(idAdmin),
+CONSTRAINT fk_ADMINISTRADOR FOREIGN KEY(idDistrito) REFERENCES DISTRITO(idDistrito),
+CONSTRAINT pk_USUARIO PRIMARY KEY(idUser)
+);
+CREATE TABLE CELULAR
+(idCelular char(3) NOT NULL,
+nroCelular varchar(20) NOT NULL,
+idUser char(8) NOT NULL,
+idCiudad char(4) NOT NULL,
+CONSTRAINT fk_USUARIO FOREIGN KEY(idUser) REFERENCES USUARIO(idUser),
+CONSTRAINT fk_CIUDAD FOREIGN KEY(idCiudad) REFERENCES CIUDAD(idCiudad),
+CONSTRAINT pk_CELULAR PRIMARY KEY(idCelular)
+);
+CREATE TABLE FUNCIONES
+(idFun char(4) NOT NULL,
+fecha date NOT NULL,
+horario time NOT NULL,
+nroUbic char(2) UNIQUE NOT NULL,
+precioFun REAL NOT NULL,
+idAdmin char(4) NOT NULL,
+CONSTRAINT fk_ADMINISTRADOR FOREIGN KEY(idAdmin) REFERENCES ADMINISTRADOR(idAdmin),
+CONSTRAINT pk_FUNCIONES PRIMARY KEY(idFun)
+);
+CREATE TABLE FUN_SERVI
+(idFunServi char(5) NOT NULL,
+idFun char(4) NOT NULL,
+idServi char(5) NOT NULL,
+cantServi char(2) NULL,
+subtotal REAL NULL,
+CONSTRAINT fk_FUNCIONES FOREIGN KEY(idFun) REFERENCES FUNCIONES(idFun),
+CONSTRAINT fk_SERVICIOS FOREIGN KEY(idServi) REFERENCES SERVICIOS(idServi),
+CONSTRAINT pk_FUN_SERVI PRIMARY KEY(idFunServi)
+);
+CREATE TABLE FUN_PELIS
+(idFunPelis char(5) NOT NULL,
+idFun char(4) NOT NULL,
+idPeli char(6) NOT NULL,
+Duracion time NOT NULL,
+CONSTRAINT fk_FUNCIONES FOREIGN KEY(idFun) REFERENCES FUNCIONES(idFun),
+CONSTRAINT fk_PELICULAS FOREIGN KEY(idPeli) REFERENCES PELICULAS(idPeli),
+CONSTRAINT pk_FUN_SERVI PRIMARY KEY(idFunPelis)
+);
+CREATE TABLE PELIS_GEN
+(idPelisGen char(5) NOT NULL,
+idPeli char(6) NOT NULL,
+idGen char(4) NOT NULL,
+CONSTRAINT fk_PELICULAS FOREIGN KEY(idPeli) REFERENCES PELICULAS(idPeli),
+CONSTRAINT fk_GENERO FOREIGN KEY(idGen) REFERENCES GENERO(idGen),
+CONSTRAINT pk_PELIS_GEN PRIMARY KEY(idPelisGen)
+);
+CREATE TABLE PELIS_CATEG
+(idPelisCateg char(5) NOT NULL,
+idPeli char(6) NOT NULL,
+idCateg char(4) NOT NULL,
+CONSTRAINT fk_PELICULAS FOREIGN KEY(idPeli) REFERENCES PELICULAS(idPeli),
+CONSTRAINT fk_CATEGORIA FOREIGN KEY(idCateg) REFERENCES CATEGORIA(idCateg),
+CONSTRAINT pk_PELIS_CATEG PRIMARY KEY(idPelisCateg)
+);
+CREATE TABLE BOLETO
+(nroBoleto char(9) NOT NULL,
+idUser char(8) NOT NULL,
+idPeli char(6) NOT NULL,
+idFun char(4) NOT NULL,
+fechaBoleto date NULL,
+tipoPago varchar(20) NULL,
+totalPago REAL NULL,
+CONSTRAINT fk_USUARIO FOREIGN KEY(idUser) REFERENCES USUARIO(idUser),
+CONSTRAINT fk_PELICULAS FOREIGN KEY(idPeli) REFERENCES PELICULAS(idPeli),
+CONSTRAINT fk_FUNCIONES FOREIGN KEY(idFun) REFERENCES FUNCIONES(idFun),
+CONSTRAINT pk_BOLETO PRIMARY KEY(nroBoleto)
+);</sql><current_tab id="0"/></tab_sql></sqlb_project>

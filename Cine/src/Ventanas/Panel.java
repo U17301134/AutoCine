@@ -35,6 +35,7 @@ public class Panel extends javax.swing.JFrame {
         jToggleButton10 = new javax.swing.JToggleButton();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         Menu = new javax.swing.JPanel();
         imgLogo = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -45,7 +46,6 @@ public class Panel extends javax.swing.JFrame {
         panelCartelera = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel6 = new javax.swing.JLabel();
         peli = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -115,6 +115,8 @@ public class Panel extends javax.swing.JFrame {
 
         jLabel16.setText("jLabel16");
 
+        jLabel6.setText("Estreno:");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -159,9 +161,6 @@ public class Panel extends javax.swing.JFrame {
         jLabel7.setText("Cartelera");
         panelCartelera.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 130, 20));
         panelCartelera.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 285, 800, -1));
-
-        jLabel6.setText("Estreno:");
-        panelCartelera.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, -1, -1));
 
         peli.setBackground(new java.awt.Color(255, 102, 102));
         peli.addMouseListener(new java.awt.event.MouseAdapter() {
